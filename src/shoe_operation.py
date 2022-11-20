@@ -80,4 +80,4 @@ def right_operation(image, front_img, count, keypoints):
     ## Rearranging Image Location
     image[point2:point4, point3:point1] = img_overlayed
     # Uncomment to Write Image
-    cv2.imwrite('FinalOutput.png', image)
+    cv2.imwrite('samples/AR_Shoe_Output.png', image)
