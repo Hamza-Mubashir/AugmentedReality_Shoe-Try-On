@@ -10,7 +10,7 @@ def operation_handler(image, shoe):
     # For static images:
     with mp_objectron.Objectron(static_image_mode=True,
                                 max_num_objects=2,
-                                min_detection_confidence=0.3,
+                                min_detection_confidence=0.2,
                                 model_name='Shoe') as objectron:
         # Convert the BGR image to RGB and process it with MediaPipe Objectron.
         results = objectron.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
