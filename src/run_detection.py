@@ -9,7 +9,7 @@ mp_objectron = mp.solutions.objectron
 def operation_handler(image, shoe):
     # For static images:
     with mp_objectron.Objectron(static_image_mode=True,
-                                max_num_objects=5,
+                                max_num_objects=2,
                                 min_detection_confidence=0.3,
                                 model_name='Shoe') as objectron:
         # Convert the BGR image to RGB and process it with MediaPipe Objectron.
