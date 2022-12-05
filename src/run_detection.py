@@ -8,9 +8,9 @@ mp_objectron = mp.solutions.objectron
 
 def operation_handler(image, shoe):
     # For static images:
-    with mp_objectron.Objectron(static_image_mode=True,
+    with mp_objectron.Objectron(static_image_mode=False,
                                 max_num_objects=2,
-                                min_detection_confidence=0.2,
+                                min_detection_confidence=0.3,
                                 model_name='Shoe') as objectron:
         # Convert the BGR image to RGB and process it with MediaPipe Objectron.
         results = objectron.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
@@ -40,15 +40,26 @@ def operation_handler(image, shoe):
                                     'Y': data_point.y,
                                     })
 
+            point1 = int(keypoints[2]['X']*image.shape[1])
+            point2 = int(keypoints[2]['Y']*image.shape[0])
+            point3 = int(keypoints[7]['X']*image.shape[1])
+            point4 = int(keypoints[7]['Y']*image.shape[0])
+
+            image_width = image.shape[1]
+            image_centre = image_width/2
+            print("The image centre is: {0}".format(image_centre))
+
             #### Left Foot Operation Handler
-            if count == 0:
-                shoe_operation.left_operation(image, shoe, count, keypoints)
+            if point1 <= image_centre:
+                print("Running Left Foot")
+                image = shoe_operation.left_operation(image, shoe, count, point1, point2, point3, point4)
             #### Right Foot Operation Handler
-            if count == 1:
-                shoe = cv2.flip(shoe, 1)
-                shoe_operation.right_operation(image, shoe, count, keypoints)
+            if point1 >= image_centre:
+                print("Running Right Foot")
+                right_shoe = cv2.flip(shoe, 1)
+                image = shoe_operation.right_operation(image, right_shoe, count, point1, point2, point3, point4)
             # Updating Count
             count = count + 1
             # For Last Iteration Break
             if count == 2:
-                break
+               cv2.imwrite('samples/AR_Shoe_Output.png', image)

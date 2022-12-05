@@ -2,20 +2,6 @@ import cv2
 import cvzone
 import numpy as np
 
-def left_foot_keypoints(image, keypoints):
-    point1 = int(keypoints[2]['X']*image.shape[1])
-    point2 = int(keypoints[2]['Y']*image.shape[0])
-    point3 = int(keypoints[7]['X']*image.shape[1])
-    point4 = int(keypoints[7]['Y']*image.shape[0])
-    return point1, point2, point3, point4
-
-def right_foot_keypoints(image, keypoints):
-    point1 = int(keypoints[2]['X']*image.shape[1])
-    point2 = int(keypoints[2]['Y']*image.shape[0])
-    point3 = int(keypoints[7]['X']*image.shape[1])
-    point4 = int(keypoints[7]['Y']*image.shape[0])
-    return point1, point2, point3, point4
-
 def overlayPNG(imgBack, imgFront, pos=[0, 0]):
     hf, wf, cf = imgFront.shape
     hb, wb, cb = imgBack.shape
@@ -35,9 +21,7 @@ def overlayPNG(imgBack, imgFront, pos=[0, 0]):
     imgBack = cv2.bitwise_or(imgBack, imgMaskFull)
     return imgBack
 
-def left_operation(image, front_img, count, keypoints):
-    point1, point2, point3, point4 = left_foot_keypoints(image, keypoints)
-
+def left_operation(image, front_img, count, point1, point2, point3, point4):
     cropped_image = image[point2:point4, point3:point1]
 
     # cropped_image = cv2.resize(cropped_image, interpolation = cv2.INTER_AREA)
@@ -57,10 +41,9 @@ def left_operation(image, front_img, count, keypoints):
     ## Rearranging Image Location
     image[point2:point4, point3:point1] = img_overlayed
     # Uncomment to Write Image
-    # cv2.imwrite('11Final.png'+ '_{0}'.format(count)+'.png', image)
+    return image
 
-def right_operation(image, front_img, count, keypoints):
-    point1, point2, point3, point4 = right_foot_keypoints(image, keypoints)
+def right_operation(image, front_img, count, point1, point2, point3, point4):
     cropped_image = image[point2:point4, point3:point1]
 
     # cropped_image = cv2.resize(cropped_image, interpolation = cv2.INTER_AREA)
@@ -80,4 +63,4 @@ def right_operation(image, front_img, count, keypoints):
     ## Rearranging Image Location
     image[point2:point4, point3:point1] = img_overlayed
     # Uncomment to Write Image
-    cv2.imwrite('samples/AR_Shoe_Output.png', image)
+    return image
